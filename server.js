@@ -2,6 +2,7 @@ const express = require('express');
 const Database = require('better-sqlite3');
 const cors = require('cors');
 const path = require('path');
+const crypto = require('crypto');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,10 +12,16 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'copa2026';
 const db = new Database(path.join(__dirname, 'db', 'bolao.db'));
 
 db.exec(`
+  CREATE TABLE IF NOT EXISTS players (
+    name       TEXT PRIMARY KEY,
+    pass_hash  TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
+
   CREATE TABLE IF NOT EXISTS palpites (
-    id        INTEGER PRIMARY KEY AUTOINCREMENT,
-    player    TEXT    NOT NULL,
-    match_id  TEXT    NOT NULL,
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    player     TEXT NOT NULL,
+    match_id   TEXT NOT NULL,
     home_score INTEGER NOT NULL,
     away_score INTEGER NOT NULL,
     created_at TEXT DEFAULT (datetime('now')),
@@ -44,14 +51,14 @@ const PHASES = {
 };
 
 const MATCHES = [
-  { id:'m01', phase:'grupos',  group:'Grupo A', home:'Brasil',      hf:'🇧🇷', away:'México',       af:'🇲🇽', dt:'2026-06-11T12:00:00' },
-  { id:'m02', phase:'grupos',  group:'Grupo A', home:'Argentina',   hf:'🇦🇷', away:'Marrocos',     af:'🇲🇦', dt:'2026-06-11T15:00:00' },
-  { id:'m03', phase:'grupos',  group:'Grupo B', home:'Alemanha',    hf:'🇩🇪', away:'Japão',        af:'🇯🇵', dt:'2026-06-12T12:00:00' },
-  { id:'m04', phase:'grupos',  group:'Grupo B', home:'França',      hf:'🇫🇷', away:'Espanha',      af:'🇪🇸', dt:'2026-06-12T15:00:00' },
-  { id:'m05', phase:'grupos',  group:'Grupo C', home:'Portugal',    hf:'🇵🇹', away:'Inglaterra',   af:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', dt:'2026-06-13T12:00:00' },
-  { id:'m06', phase:'grupos',  group:'Grupo C', home:'Holanda',     hf:'🇳🇱', away:'Coreia do Sul',af:'🇰🇷', dt:'2026-06-13T15:00:00' },
-  { id:'m07', phase:'grupos',  group:'Grupo D', home:'EUA',         hf:'🇺🇸', away:'Croácia',      af:'🇭🇷', dt:'2026-06-14T12:00:00' },
-  { id:'m08', phase:'grupos',  group:'Grupo D', home:'Itália',      hf:'🇮🇹', away:'Uruguai',      af:'🇺🇾', dt:'2026-06-14T15:00:00' },
+  { id:'m01', phase:'grupos',  group:'Grupo A', home:'Brasil',      hf:'🇧🇷', away:'México',        af:'🇲🇽', dt:'2026-06-11T12:00:00' },
+  { id:'m02', phase:'grupos',  group:'Grupo A', home:'Argentina',   hf:'🇦🇷', away:'Marrocos',      af:'🇲🇦', dt:'2026-06-11T15:00:00' },
+  { id:'m03', phase:'grupos',  group:'Grupo B', home:'Alemanha',    hf:'🇩🇪', away:'Japão',         af:'🇯🇵', dt:'2026-06-12T12:00:00' },
+  { id:'m04', phase:'grupos',  group:'Grupo B', home:'França',      hf:'🇫🇷', away:'Espanha',       af:'🇪🇸', dt:'2026-06-12T15:00:00' },
+  { id:'m05', phase:'grupos',  group:'Grupo C', home:'Portugal',    hf:'🇵🇹', away:'Inglaterra',    af:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', dt:'2026-06-13T12:00:00' },
+  { id:'m06', phase:'grupos',  group:'Grupo C', home:'Holanda',     hf:'🇳🇱', away:'Coreia do Sul', af:'🇰🇷', dt:'2026-06-13T15:00:00' },
+  { id:'m07', phase:'grupos',  group:'Grupo D', home:'EUA',         hf:'🇺🇸', away:'Croácia',       af:'🇭🇷', dt:'2026-06-14T12:00:00' },
+  { id:'m08', phase:'grupos',  group:'Grupo D', home:'Itália',      hf:'🇮🇹', away:'Uruguai',       af:'🇺🇾', dt:'2026-06-14T15:00:00' },
   { id:'m09', phase:'oitavas', group:'Oitavas de final', home:'1º Grupo A', hf:'🔵', away:'2º Grupo B', af:'🔴', dt:'2026-07-01T16:00:00' },
   { id:'m10', phase:'oitavas', group:'Oitavas de final', home:'1º Grupo B', hf:'🔵', away:'2º Grupo A', af:'🔴', dt:'2026-07-02T16:00:00' },
   { id:'m11', phase:'quartas', group:'Quartas de final', home:'Venc. O1',   hf:'🔵', away:'Venc. O2',   af:'🔴', dt:'2026-07-08T16:00:00' },
@@ -60,6 +67,10 @@ const MATCHES = [
 ];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
+function hashPass(pass) {
+  return crypto.createHash('sha256').update(pass + 'bolao2026salt').digest('hex');
+}
+
 function calcPts(ph, pa, rh, ra) {
   if (ph === rh && pa === ra) return 10;
   const pD = ph - pa, rD = rh - ra;
@@ -69,9 +80,44 @@ function calcPts(ph, pa, rh, ra) {
   return 0;
 }
 
-// ── Rotas públicas ────────────────────────────────────────────────────────────
+function authPlayer(name, pass) {
+  const player = db.prepare('SELECT * FROM players WHERE name = ?').get(name);
+  if (!player) return { ok: false, newPlayer: true };
+  if (player.pass_hash !== hashPass(pass)) return { ok: false, newPlayer: false };
+  return { ok: true };
+}
 
-// Lista todos os jogos com resultados registrados
+// ── Rotas de autenticação ─────────────────────────────────────────────────────
+
+// Verifica se jogador existe
+app.get('/api/player/:name', (req, res) => {
+  const player = db.prepare('SELECT name FROM players WHERE name = ?').get(req.params.name);
+  res.json({ exists: !!player });
+});
+
+// Registrar novo jogador
+app.post('/api/player/register', (req, res) => {
+  const { name, password } = req.body;
+  if (!name || !password) return res.status(400).json({ error: 'Nome e senha obrigatórios' });
+  if (name.trim().length < 2) return res.status(400).json({ error: 'Nome muito curto' });
+  if (password.length < 4) return res.status(400).json({ error: 'Senha deve ter ao menos 4 caracteres' });
+  const exists = db.prepare('SELECT name FROM players WHERE name = ?').get(name.trim());
+  if (exists) return res.status(409).json({ error: 'Nome já cadastrado — use sua senha' });
+  db.prepare('INSERT INTO players (name, pass_hash) VALUES (?, ?)').run(name.trim(), hashPass(password));
+  res.json({ ok: true });
+});
+
+// Login
+app.post('/api/player/login', (req, res) => {
+  const { name, password } = req.body;
+  if (!name || !password) return res.status(400).json({ error: 'Dados incompletos' });
+  const player = db.prepare('SELECT * FROM players WHERE name = ?').get(name.trim());
+  if (!player) return res.status(404).json({ error: 'Jogador não encontrado' });
+  if (player.pass_hash !== hashPass(password)) return res.status(401).json({ error: 'Senha incorreta' });
+  res.json({ ok: true, name: player.name });
+});
+
+// ── Rotas públicas ────────────────────────────────────────────────────────────
 app.get('/api/matches', (req, res) => {
   const resultados = db.prepare('SELECT * FROM resultados').all();
   const resMap = {};
@@ -79,7 +125,6 @@ app.get('/api/matches', (req, res) => {
   res.json({ matches: MATCHES, resultados: resMap, phases: PHASES });
 });
 
-// Palpites de um jogador
 app.get('/api/palpites/:player', (req, res) => {
   const rows = db.prepare('SELECT * FROM palpites WHERE player = ?').all(req.params.player);
   const map = {};
@@ -87,11 +132,14 @@ app.get('/api/palpites/:player', (req, res) => {
   res.json(map);
 });
 
-// Salvar/atualizar palpite
+// Salvar palpite — requer autenticação
 app.post('/api/palpites', (req, res) => {
-  const { player, match_id, home_score, away_score } = req.body;
-  if (!player || !match_id || home_score == null || away_score == null)
+  const { player, password, match_id, home_score, away_score } = req.body;
+  if (!player || !password || !match_id || home_score == null || away_score == null)
     return res.status(400).json({ error: 'Dados incompletos' });
+
+  const auth = authPlayer(player, password);
+  if (!auth.ok) return res.status(401).json({ error: 'Senha incorreta' });
 
   const match = MATCHES.find(m => m.id === match_id);
   if (!match) return res.status(404).json({ error: 'Jogo não encontrado' });
@@ -110,13 +158,11 @@ app.post('/api/palpites', (req, res) => {
   res.json({ ok: true });
 });
 
-// Ranking geral
 app.get('/api/ranking', (req, res) => {
   const resultados = db.prepare('SELECT * FROM resultados').all();
   const resMap = {};
   resultados.forEach(r => resMap[r.match_id] = { h: r.home_score, a: r.away_score });
-
-  const players = db.prepare('SELECT DISTINCT player FROM palpites').all().map(r => r.player);
+  const players = db.prepare('SELECT name FROM players').all().map(r => r.name);
   const scores = players.map(player => {
     const palpites = db.prepare('SELECT * FROM palpites WHERE player = ?').all(player);
     let pts = 0, exact = 0, total = 0;
@@ -131,19 +177,13 @@ app.get('/api/ranking', (req, res) => {
     });
     return { player, pts, exact, total };
   }).sort((a, b) => b.pts - a.pts);
-
-  res.json({
-    ranking: scores,
-    jogos: MATCHES.length,
-    finalizados: Object.keys(resMap).length
-  });
+  res.json({ ranking: scores, jogos: MATCHES.length, finalizados: Object.keys(resMap).length });
 });
 
-// ── Rotas admin (protegidas por senha) ───────────────────────────────────────
-
+// ── Rotas admin ───────────────────────────────────────────────────────────────
 function adminAuth(req, res, next) {
-  const pw = req.headers['x-admin-password'];
-  if (pw !== ADMIN_PASSWORD) return res.status(401).json({ error: 'Senha incorreta' });
+  if (req.headers['x-admin-password'] !== ADMIN_PASSWORD)
+    return res.status(401).json({ error: 'Senha incorreta' });
   next();
 }
 
@@ -151,7 +191,6 @@ app.post('/api/admin/resultado', adminAuth, (req, res) => {
   const { match_id, home_score, away_score } = req.body;
   if (!match_id || home_score == null || away_score == null)
     return res.status(400).json({ error: 'Dados incompletos' });
-
   db.prepare(`
     INSERT INTO resultados (match_id, home_score, away_score)
     VALUES (?, ?, ?)
@@ -160,7 +199,6 @@ app.post('/api/admin/resultado', adminAuth, (req, res) => {
       away_score = excluded.away_score,
       updated_at = datetime('now')
   `).run(match_id, home_score, away_score);
-
   res.json({ ok: true });
 });
 
@@ -169,13 +207,11 @@ app.delete('/api/admin/resultado/:match_id', adminAuth, (req, res) => {
   res.json({ ok: true });
 });
 
-// Exportar ranking CSV
 app.get('/api/admin/export', adminAuth, (req, res) => {
   const resultados = db.prepare('SELECT * FROM resultados').all();
   const resMap = {};
   resultados.forEach(r => resMap[r.match_id] = { h: r.home_score, a: r.away_score });
-
-  const players = db.prepare('SELECT DISTINCT player FROM palpites').all().map(r => r.player);
+  const players = db.prepare('SELECT name FROM players').all().map(r => r.name);
   const scores = players.map(player => {
     const palpites = db.prepare('SELECT * FROM palpites WHERE player = ?').all(player);
     let pts = 0, exact = 0, total = 0;
@@ -190,16 +226,27 @@ app.get('/api/admin/export', adminAuth, (req, res) => {
     });
     return { player, pts, exact, total };
   }).sort((a, b) => b.pts - a.pts);
-
   const csv = 'Pos,Nome,Pontos,Placares exatos,Jogos apostados\n'
     + scores.map((s, i) => `${i+1},"${s.player}",${s.pts},${s.exact},${s.total}`).join('\n');
-
   res.setHeader('Content-Type', 'text/csv');
   res.setHeader('Content-Disposition', 'attachment; filename="ranking_copa2026.csv"');
   res.send(csv);
 });
 
-// ── Start ─────────────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`✅ Bolão rodando em http://localhost:${PORT}`);
+// Admin: resetar senha de um jogador
+app.post('/api/admin/reset-password', adminAuth, (req, res) => {
+  const { name, new_password } = req.body;
+  if (!name || !new_password) return res.status(400).json({ error: 'Dados incompletos' });
+  const player = db.prepare('SELECT name FROM players WHERE name = ?').get(name);
+  if (!player) return res.status(404).json({ error: 'Jogador não encontrado' });
+  db.prepare('UPDATE players SET pass_hash = ? WHERE name = ?').run(hashPass(new_password), name);
+  res.json({ ok: true });
 });
+
+// Admin: listar jogadores
+app.get('/api/admin/players', adminAuth, (req, res) => {
+  const players = db.prepare('SELECT name, created_at FROM players ORDER BY created_at').all();
+  res.json(players);
+});
+
+app.listen(PORT, () => console.log(`✅ Bolão rodando em http://localhost:${PORT}`));

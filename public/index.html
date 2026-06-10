@@ -11,7 +11,7 @@
     .header{background:#0F6E56;border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:12px}
     .header h1{color:#fff;font-size:20px;font-weight:600}
     .header p{color:#9FE1CB;font-size:13px;margin-top:2px}
-    .nav{display:flex;gap:0;margin-bottom:1.5rem;border-bottom:1px solid #e4e4e7;background:#fff;border-radius:12px 12px 0 0;overflow:hidden}
+    .nav{display:flex;margin-bottom:1.5rem;border-bottom:1px solid #e4e4e7;background:#fff;border-radius:12px 12px 0 0;overflow:hidden}
     .nav-btn{flex:1;background:none;border:none;padding:12px 8px;font-size:13px;color:#71717a;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
     .nav-btn.active{color:#0F6E56;border-bottom-color:#0F6E56;font-weight:600;background:#f0fdf9}
     .nav-btn:hover:not(.active){color:#18181b;background:#fafafa}
@@ -21,6 +21,24 @@
     .form-row label{display:block;font-size:13px;color:#71717a;margin-bottom:4px;font-weight:500}
     .form-row input{width:100%;padding:9px 12px;font-size:14px;border:1px solid #e4e4e7;border-radius:8px;background:#fafafa;color:#18181b;transition:border .15s}
     .form-row input:focus{outline:none;border-color:#0F6E56;box-shadow:0 0 0 3px #dcfce7;background:#fff}
+    /* Auth */
+    .auth-box{background:#fff;border:1px solid #e4e4e7;border-radius:16px;padding:2rem;max-width:400px;margin:2rem auto;text-align:center}
+    .auth-box h2{font-size:18px;font-weight:600;color:#18181b;margin-bottom:6px}
+    .auth-box p{font-size:13px;color:#71717a;margin-bottom:20px}
+    .auth-form .form-row{text-align:left}
+    .auth-btn{width:100%;padding:10px;background:#0F6E56;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s;margin-top:4px}
+    .auth-btn:hover{opacity:.9}
+    .auth-switch{font-size:13px;color:#71717a;margin-top:16px}
+    .auth-switch a{color:#0F6E56;cursor:pointer;font-weight:500;text-decoration:none}
+    .auth-error{font-size:13px;color:#dc2626;margin-top:8px;min-height:18px}
+    .auth-success{font-size:13px;color:#16a34a;margin-top:8px}
+    /* Jogador logado */
+    .player-bar{background:#fff;border:1px solid #e4e4e7;border-radius:12px;padding:10px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+    .player-bar-name{font-size:14px;font-weight:600;color:#18181b}
+    .player-bar-sub{font-size:12px;color:#71717a;margin-top:1px}
+    .logout-link{font-size:12px;color:#71717a;cursor:pointer;border:1px solid #e4e4e7;border-radius:6px;padding:4px 10px;background:none}
+    .logout-link:hover{background:#f4f4f5}
+    /* Matches */
     .match-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
     .match-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
     .match-date{font-size:12px;color:#71717a}
@@ -43,13 +61,13 @@
     .score-sep{font-size:18px;color:#a1a1aa;font-weight:500}
     .save-btn{width:100%;margin-top:10px;padding:8px;background:#0F6E56;color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-weight:600;transition:opacity .15s}
     .save-btn:hover{opacity:.88}
-    .save-btn:disabled{opacity:.5;cursor:not-allowed}
     .result-row{margin-top:8px;font-size:12px;color:#71717a;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
     .pts-pill{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px}
     .p10{background:#dcfce7;color:#166534}.p5{background:#dbeafe;color:#1e40af}
     .p3{background:#fef9c3;color:#854d0e}.p1{background:#ede9fe;color:#4c1d95}
     .p0{background:#f4f4f5;color:#a1a1aa}
     .group-label{font-size:11px;font-weight:700;color:#71717a;text-transform:uppercase;letter-spacing:.8px;margin:14px 0 6px}
+    /* Ranking */
     .ranking-row{display:grid;grid-template-columns:36px 1fr auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f4f4f5}
     .ranking-row:last-child{border-bottom:none}
     .rank-name{font-size:14px;color:#18181b;font-weight:500}
@@ -64,6 +82,7 @@
     .section-title{font-size:15px;font-weight:600;color:#18181b;margin-bottom:10px}
     .export-btn{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #e4e4e7;border-radius:8px;padding:8px 16px;font-size:13px;color:#18181b;cursor:pointer;margin-bottom:14px;font-weight:500;transition:background .15s}
     .export-btn:hover{background:#f4f4f5}
+    /* Regras */
     .rule-row{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #f4f4f5}
     .rule-row:last-child{border-bottom:none}
     .rule-pts{min-width:46px;text-align:center;border-radius:8px;padding:4px 6px;font-weight:700;font-size:13px}
@@ -84,7 +103,7 @@
     .pw-btn:hover{opacity:.9}
     .pw-error{font-size:13px;color:#dc2626;margin-top:10px}
     .warn-box{background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:10px 14px;font-size:13px;color:#92400e;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-    .logout-btn{background:none;border:1px solid #fcd34d;border-radius:8px;padding:4px 12px;font-size:12px;color:#92400e;cursor:pointer;font-weight:500}
+    .admin-logout-btn{background:none;border:1px solid #fcd34d;border-radius:8px;padding:4px 12px;font-size:12px;color:#92400e;cursor:pointer;font-weight:500}
     .admin-input{width:40px;height:36px;text-align:center;font-size:14px;border:1px solid #e4e4e7;border-radius:6px;background:#fafafa}
     .admin-input:focus{outline:none;border-color:#0F6E56}
     .confirm-btn{background:#0F6E56;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:12px;cursor:pointer;font-weight:600;margin-top:8px}
@@ -96,12 +115,17 @@
     .filter-btn{background:#fff;border:1px solid #e4e4e7;border-radius:20px;padding:4px 14px;font-size:12px;color:#71717a;cursor:pointer;font-weight:500;transition:all .15s}
     .filter-btn.active{background:#0F6E56;color:#fff;border-color:#0F6E56}
     .loading{text-align:center;padding:2rem;color:#a1a1aa;font-size:14px}
-    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#18181b;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .2s;pointer-events:none}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#18181b;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap}
     .toast.show{opacity:1}
+    .admin-players-list{font-size:13px}
+    .admin-player-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f4f4f5}
+    .admin-player-row:last-child{border-bottom:none}
+    .reset-btn{font-size:12px;color:#71717a;background:none;border:1px solid #e4e4e7;border-radius:6px;padding:3px 10px;cursor:pointer}
+    .reset-btn:hover{background:#f4f4f5}
+    .info-box{background:#f0fdf9;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;font-size:13px;color:#166534;margin-bottom:14px}
   </style>
 </head>
 <body>
-
 <div class="app">
   <div class="header">
     <div style="font-size:34px">🏆</div>
@@ -120,18 +144,41 @@
 
   <!-- PALPITES -->
   <div id="tab-palpites" class="section active">
-    <div class="card">
-      <div class="form-row" style="margin:0">
-        <label>Seu nome</label>
-        <input type="text" id="player-name" placeholder="Ex: João Silva" oninput="updatePlayer()"/>
+    <!-- Tela de login/cadastro -->
+    <div id="auth-screen">
+      <div class="auth-box">
+        <div style="font-size:40px;margin-bottom:8px">⚽</div>
+        <h2 id="auth-title">Entrar no Bolão</h2>
+        <p id="auth-subtitle">Digite seu nome e senha para acessar</p>
+        <div class="auth-form">
+          <div class="form-row"><label>Seu nome</label><input type="text" id="auth-name" placeholder="Ex: João Silva" autocomplete="username"/></div>
+          <div class="form-row"><label id="auth-pass-label">Senha</label><input type="password" id="auth-pass" placeholder="Mínimo 4 caracteres" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAuth()"/></div>
+          <div class="form-row" id="auth-pass2-row" style="display:none"><label>Confirmar senha</label><input type="password" id="auth-pass2" placeholder="Repita a senha" onkeydown="if(event.key==='Enter')doAuth()"/></div>
+          <button class="auth-btn" onclick="doAuth()" id="auth-btn">Entrar</button>
+          <div class="auth-error" id="auth-error"></div>
+        </div>
+        <div class="auth-switch" id="auth-switch">
+          Primeira vez? <a onclick="toggleAuthMode()">Criar conta</a>
+        </div>
       </div>
     </div>
-    <div class="filter-row">
-      <button class="filter-btn active" onclick="setFilter('todos',this)">Todos</button>
-      <button class="filter-btn" onclick="setFilter('abertos',this)">Abertos</button>
-      <button class="filter-btn" onclick="setFilter('encerrados',this)">Encerrados</button>
+
+    <!-- Tela de palpites (logado) -->
+    <div id="palpites-screen" style="display:none">
+      <div class="player-bar">
+        <div>
+          <div class="player-bar-name" id="player-bar-name"></div>
+          <div class="player-bar-sub">Logado no bolão ✓</div>
+        </div>
+        <button class="logout-link" onclick="doLogout()">Sair</button>
+      </div>
+      <div class="filter-row">
+        <button class="filter-btn active" onclick="setFilter('todos',this)">Todos</button>
+        <button class="filter-btn" onclick="setFilter('abertos',this)">Abertos</button>
+        <button class="filter-btn" onclick="setFilter('encerrados',this)">Encerrados</button>
+      </div>
+      <div id="matches-list"><div class="loading">Carregando jogos...</div></div>
     </div>
-    <div id="matches-list"><div class="loading">Carregando jogos...</div></div>
   </div>
 
   <!-- RANKING -->
@@ -145,7 +192,7 @@
     </div>
     <button class="export-btn" onclick="exportCSV()">⬇️ Exportar ranking (CSV)</button>
     <p class="section-title">Classificação</p>
-    <div class="card" id="ranking-list"><div class="loading">Carregando ranking...</div></div>
+    <div class="card" id="ranking-list"><div class="loading">Carregando...</div></div>
   </div>
 
   <!-- REGRAS -->
@@ -172,7 +219,8 @@
       </table>
     </div>
     <div class="card" style="margin-top:14px;font-size:13px;color:#71717a;line-height:1.7">
-      ⏰ Palpites ficam abertos até o horário de início de cada jogo. Você não precisa fazer tudo de uma vez — volte antes de cada partida!
+      ⏰ Palpites ficam abertos até o horário de início de cada jogo. Você não precisa fazer tudo de uma vez — volte antes de cada partida!<br><br>
+      🔐 Cada participante cria sua conta com nome e senha. Só você pode alterar seus próprios palpites.
     </div>
   </div>
 
@@ -184,19 +232,23 @@
         <h3>Área do organizador</h3>
         <p>Digite a senha para acessar</p>
         <div class="pw-row">
-          <input type="password" class="pw-input" id="pw-input" placeholder="Senha" onkeydown="if(event.key==='Enter')checkPw()">
-          <button class="pw-btn" onclick="checkPw()">Entrar</button>
+          <input type="password" class="pw-input" id="pw-input" placeholder="Senha admin" onkeydown="if(event.key==='Enter')checkAdminPw()">
+          <button class="pw-btn" onclick="checkAdminPw()">Entrar</button>
         </div>
-        <div class="pw-error" id="pw-error" style="display:none">Senha incorreta. Tente novamente.</div>
+        <div class="pw-error" id="pw-error" style="display:none">Senha incorreta.</div>
       </div>
     </div>
     <div id="admin-panel" style="display:none">
       <div class="warn-box">
         <span>⚙️ Modo admin ativo</span>
-        <button class="logout-btn" onclick="adminLogout()">Sair</button>
+        <button class="admin-logout-btn" onclick="adminLogout()">Sair</button>
       </div>
-      <p class="section-title">Registrar resultados reais</p>
-      <div id="admin-matches"><div class="loading">Carregando...</div></div>
+
+      <p class="section-title">Registrar resultados</p>
+      <div id="admin-matches"></div>
+
+      <p class="section-title" style="margin-top:20px">Participantes cadastrados</p>
+      <div class="card" id="admin-players-card"><div class="loading">Carregando...</div></div>
     </div>
   </div>
 </div>
@@ -209,40 +261,127 @@ let appData = { matches: [], resultados: {}, phases: {} };
 let myPalpites = {};
 let currentFilter = 'todos';
 let adminPw = '';
+let authMode = 'login'; // 'login' | 'register'
 
-const playerName = () => document.getElementById('player-name').value.trim();
+// Sessão em memória (sessionStorage para persistir na aba)
+let session = { name: '', password: '' };
+try {
+  const s = sessionStorage.getItem('bolao_session');
+  if (s) session = JSON.parse(s);
+} catch(e) {}
 
-function toast(msg, dur=2500){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),dur);
+function saveSession() {
+  try { sessionStorage.setItem('bolao_session', JSON.stringify(session)); } catch(e) {}
+}
+
+function toast(msg, dur=2500) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
 }
 
 // ── API ───────────────────────────────────────────────────────────────────────
-async function apiFetch(url, opts={}){
+async function apiFetch(url, opts={}) {
   const res = await fetch(url, opts);
-  if(!res.ok){ const e=await res.json().catch(()=>({error:'Erro desconhecido'})); throw new Error(e.error||'Erro'); }
+  if (!res.ok) { const e = await res.json().catch(() => ({error:'Erro'})); throw new Error(e.error || 'Erro'); }
   return res.json();
 }
 
-async function loadData(){
+async function loadData() {
   appData = await apiFetch('/api/matches');
-  if(playerName()) await loadMyPalpites();
+  if (session.name) await loadMyPalpites();
   renderMatches();
 }
 
-async function loadMyPalpites(){
-  const pn=playerName();
-  if(!pn) return;
-  myPalpites = await apiFetch(`/api/palpites/${encodeURIComponent(pn)}`);
+async function loadMyPalpites() {
+  if (!session.name) return;
+  myPalpites = await apiFetch(`/api/palpites/${encodeURIComponent(session.name)}`);
+}
+
+// ── Auth ──────────────────────────────────────────────────────────────────────
+function toggleAuthMode() {
+  authMode = authMode === 'login' ? 'register' : 'login';
+  const isReg = authMode === 'register';
+  document.getElementById('auth-title').textContent = isReg ? 'Criar conta' : 'Entrar no Bolão';
+  document.getElementById('auth-subtitle').textContent = isReg
+    ? 'Escolha um nome e crie sua senha' : 'Digite seu nome e senha para acessar';
+  document.getElementById('auth-pass-label').textContent = isReg ? 'Criar senha' : 'Senha';
+  document.getElementById('auth-pass2-row').style.display = isReg ? '' : 'none';
+  document.getElementById('auth-btn').textContent = isReg ? 'Criar conta' : 'Entrar';
+  document.getElementById('auth-switch').innerHTML = isReg
+    ? 'Já tem conta? <a onclick="toggleAuthMode()">Entrar</a>'
+    : 'Primeira vez? <a onclick="toggleAuthMode()">Criar conta</a>';
+  document.getElementById('auth-error').textContent = '';
+}
+
+async function doAuth() {
+  const name = document.getElementById('auth-name').value.trim();
+  const pass = document.getElementById('auth-pass').value;
+  const errEl = document.getElementById('auth-error');
+  errEl.textContent = '';
+
+  if (!name) { errEl.textContent = 'Digite seu nome.'; return; }
+  if (!pass) { errEl.textContent = 'Digite sua senha.'; return; }
+
+  try {
+    if (authMode === 'register') {
+      const pass2 = document.getElementById('auth-pass2').value;
+      if (pass !== pass2) { errEl.textContent = 'As senhas não coincidem.'; return; }
+      if (pass.length < 4) { errEl.textContent = 'Senha deve ter ao menos 4 caracteres.'; return; }
+      await apiFetch('/api/player/register', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ name, password: pass })
+      });
+      toast('✅ Conta criada! Bem-vindo(a), ' + name + '!');
+    } else {
+      await apiFetch('/api/player/login', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ name, password: pass })
+      });
+    }
+    session = { name, password: pass };
+    saveSession();
+    showLoggedIn();
+  } catch(e) {
+    // Se tentou logar mas nome não existe, sugere criar conta
+    if (e.message === 'Jogador não encontrado') {
+      errEl.textContent = 'Nome não encontrado. Clique em "Criar conta" para se cadastrar.';
+    } else {
+      errEl.textContent = e.message;
+    }
+  }
+}
+
+function showLoggedIn() {
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('palpites-screen').style.display = 'block';
+  document.getElementById('player-bar-name').textContent = session.name;
+  document.getElementById('header-sub').textContent = 'Olá, ' + session.name + '! Bons palpites 🎯';
+  loadData();
+}
+
+function doLogout() {
+  session = { name: '', password: '' };
+  saveSession();
+  myPalpites = {};
+  document.getElementById('auth-screen').style.display = 'block';
+  document.getElementById('palpites-screen').style.display = 'none';
+  document.getElementById('auth-name').value = '';
+  document.getElementById('auth-pass').value = '';
+  document.getElementById('auth-error').textContent = '';
+  document.getElementById('header-sub').textContent = 'Faça seus palpites e dispute com o time!';
+  authMode = 'login';
+  document.getElementById('auth-title').textContent = 'Entrar no Bolão';
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-function isOpen(m){ return new Date() < new Date(m.dt); }
-function isUpcoming(m){ const d=(new Date(m.dt)-new Date())/36e5; return d>0&&d<=2; }
-function fmtDate(dt){ const d=new Date(dt); return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
-function fmtCountdown(dt){ const d=Math.max(0,new Date(dt)-new Date()); const h=Math.floor(d/36e5),m=Math.floor((d%36e5)/6e4); return h>0?`${h}h ${m}min`:`${m}min`; }
-function calcPts(ph,pa,rh,ra){
+function isOpen(m) { return new Date() < new Date(m.dt); }
+function isUpcoming(m) { const d=(new Date(m.dt)-new Date())/36e5; return d>0&&d<=2; }
+function fmtDate(dt) { const d=new Date(dt); return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+function fmtCountdown(dt) { const d=Math.max(0,new Date(dt)-new Date()); const h=Math.floor(d/36e5),m=Math.floor((d%36e5)/6e4); return h>0?`${h}h ${m}min`:`${m}min`; }
+function calcPts(ph,pa,rh,ra) {
   if(ph===rh&&pa===ra)return 10;
   const pD=ph-pa,rD=rh-ra,pW=Math.sign(pD),rW=Math.sign(rD);
   if(pW===rW){if(pD===rD)return 5;return 3;}
@@ -255,7 +394,7 @@ function ptsPill(raw,mult){
   return `<span class="pts-pill ${cls}">${pts>0?'+'+pts:'0'} pts${mult>1?' (×'+mult+')':''}</span>`;
 }
 
-// ── UI ────────────────────────────────────────────────────────────────────────
+// ── Tabs ──────────────────────────────────────────────────────────────────────
 function showTab(t,btn){
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
@@ -272,15 +411,10 @@ function setFilter(f,btn){
   renderMatches();
 }
 
-async function updatePlayer(){
-  document.getElementById('header-sub').textContent = playerName()
-    ? 'Olá, '+playerName()+'! Bons palpites 🎯'
-    : 'Faça seus palpites e dispute com o time!';
-  if(playerName().length>1){ await loadMyPalpites(); renderMatches(); }
-}
-
+// ── Matches ───────────────────────────────────────────────────────────────────
 function renderMatches(){
   const el=document.getElementById('matches-list');
+  if(!el) return;
   el.innerHTML='';
   const filtered=appData.matches.filter(m=>{
     if(currentFilter==='abertos') return isOpen(m);
@@ -288,7 +422,6 @@ function renderMatches(){
     return true;
   });
   if(!filtered.length){el.innerHTML='<div class="empty">Nenhum jogo nesta categoria.</div>';return;}
-
   let lastGroup='';
   filtered.forEach(m=>{
     const ph=appData.phases[m.phase];
@@ -297,7 +430,6 @@ function renderMatches(){
     const p=myPalpites[m.id];
     const done=r!==undefined;
     const raw=done&&p!=null?calcPts(p.h,p.a,r.h,r.a):null;
-
     if(m.group!==lastGroup){
       lastGroup=m.group;
       const h=document.createElement('p');h.className='group-label';h.textContent=m.group;el.appendChild(h);
@@ -307,14 +439,10 @@ function renderMatches(){
     else if(!open) statusHtml=`<span class="status-closed">🔒 Encerrado</span>`;
     else if(soon) statusHtml=`<span class="status-soon">⏰ ${fmtCountdown(m.dt)}</span>`;
     else statusHtml=`<span class="status-open">Aberto</span>`;
-
     const div=document.createElement('div');div.className='card';
     div.innerHTML=`
       <div class="match-header">
-        <div class="match-meta">
-          <span class="match-date">${fmtDate(m.dt)}</span>
-          <span class="mult-badge m${ph.mult}">×${ph.mult}</span>
-        </div>
+        <div class="match-meta"><span class="match-date">${fmtDate(m.dt)}</span><span class="mult-badge m${ph.mult}">×${ph.mult}</span></div>
         ${statusHtml}
       </div>
       <div class="teams">
@@ -337,8 +465,7 @@ function renderMatches(){
 }
 
 async function savePalpite(mid){
-  const pn=playerName();
-  if(!pn){toast('❗ Digite seu nome primeiro');return;}
+  if(!session.name){toast('❗ Faça login primeiro');return;}
   const h=document.getElementById('h-'+mid).value;
   const a=document.getElementById('a-'+mid).value;
   if(h===''||a===''){toast('❗ Preencha o placar');return;}
@@ -346,14 +473,15 @@ async function savePalpite(mid){
     await apiFetch('/api/palpites',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({player:pn,match_id:mid,home_score:parseInt(h),away_score:parseInt(a)})
+      body:JSON.stringify({player:session.name,password:session.password,match_id:mid,home_score:parseInt(h),away_score:parseInt(a)})
     });
     myPalpites[mid]={h:parseInt(h),a:parseInt(a)};
     toast('✅ Palpite salvo!');
     renderMatches();
-  }catch(e){ toast('❌ '+e.message); }
+  }catch(e){toast('❌ '+e.message);}
 }
 
+// ── Ranking ───────────────────────────────────────────────────────────────────
 async function renderRanking(){
   document.getElementById('ranking-list').innerHTML='<div class="loading">Carregando...</div>';
   try{
@@ -371,22 +499,27 @@ async function renderRanking(){
         <div><div class="rank-pts">${s.pts}</div><div class="rank-pts-sub">pts</div></div>
       </div>
     `).join('');
-  }catch(e){document.getElementById('ranking-list').innerHTML='<div class="empty">Erro ao carregar ranking.</div>';}
+  }catch(e){document.getElementById('ranking-list').innerHTML='<div class="empty">Erro ao carregar.</div>';}
 }
 
 async function exportCSV(){
   if(!adminPw){
     const pw=prompt('Senha admin para exportar:');
     if(!pw) return;
-    adminPw=pw;
+    try{
+      const res=await fetch('/api/admin/export',{headers:{'x-admin-password':pw}});
+      if(!res.ok){toast('❌ Senha incorreta');return;}
+      adminPw=pw;
+      const blob=await res.blob();
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');a.href=url;a.download='ranking_copa2026.csv';
+      document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+      toast('✅ CSV exportado!');
+    }catch(e){toast('❌ Erro ao exportar');}
+    return;
   }
-  const link=document.createElement('a');
-  link.href='/api/admin/export';
-  link.setAttribute('data-admin-pw',adminPw);
-  // Fetch com header de autenticação
   try{
     const res=await fetch('/api/admin/export',{headers:{'x-admin-password':adminPw}});
-    if(!res.ok){adminPw='';toast('❌ Senha incorreta');return;}
     const blob=await res.blob();
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');a.href=url;a.download='ranking_copa2026.csv';
@@ -396,13 +529,12 @@ async function exportCSV(){
 }
 
 // ── Admin ─────────────────────────────────────────────────────────────────────
-function checkPw(){
+function checkAdminPw(){
   const pw=document.getElementById('pw-input').value;
-  fetch('/api/ranking',{headers:{'x-admin-password':pw}}).then(()=>{
-    // Testa com uma rota admin real
-    return fetch('/api/admin/export',{headers:{'x-admin-password':pw}});
-  }).then(res=>{
+  fetch('/api/admin/players',{headers:{'x-admin-password':pw}}).then(res=>{
     if(res.status===401) throw new Error('wrong');
+    return res.json();
+  }).then(()=>{
     adminPw=pw;
     document.getElementById('admin-lock').style.display='none';
     document.getElementById('admin-panel').style.display='block';
@@ -421,8 +553,9 @@ function adminLogout(){
   document.getElementById('pw-error').style.display='none';
 }
 
-function renderAdmin(){
+async function renderAdmin(){
   if(!adminPw) return;
+  // Resultados
   const el=document.getElementById('admin-matches');
   el.innerHTML='';
   let lastGroup='';
@@ -455,6 +588,18 @@ function renderAdmin(){
     `;
     el.appendChild(div);
   });
+  // Jogadores
+  try{
+    const players=await apiFetch('/api/admin/players',{headers:{'x-admin-password':adminPw}});
+    const card=document.getElementById('admin-players-card');
+    if(!players.length){card.innerHTML='<div class="empty">Nenhum participante cadastrado ainda.</div>';return;}
+    card.innerHTML=`<div class="admin-players-list">${players.map(p=>`
+      <div class="admin-player-row">
+        <span style="font-size:13px;font-weight:500">${p.name}</span>
+        <button class="reset-btn" onclick="resetPlayerPw('${p.name}')">Resetar senha</button>
+      </div>
+    `).join('')}</div>`;
+  }catch(e){}
 }
 
 async function registrarResultado(mid){
@@ -473,9 +618,34 @@ async function registrarResultado(mid){
   }catch(e){toast('❌ '+e.message);}
 }
 
+async function resetPlayerPw(name){
+  const nova=prompt(`Nova senha para "${name}":`);
+  if(!nova) return;
+  if(nova.length<4){toast('❗ Senha deve ter ao menos 4 caracteres');return;}
+  try{
+    await apiFetch('/api/admin/reset-password',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-admin-password':adminPw},
+      body:JSON.stringify({name,new_password:nova})
+    });
+    toast('✅ Senha de '+name+' redefinida!');
+  }catch(e){toast('❌ '+e.message);}
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────────
 loadData();
-setInterval(()=>{ loadData(); }, 60000); // Atualiza a cada 1 min
+if(session.name){
+  // Tenta restaurar sessão
+  fetch('/api/player/login',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:session.name,password:session.password})
+  }).then(r=>{
+    if(r.ok) showLoggedIn();
+    else { session={name:'',password:''}; saveSession(); }
+  }).catch(()=>{});
+}
+setInterval(()=>{ loadData(); }, 60000);
 </script>
 </body>
 </html>
