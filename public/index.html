@@ -123,6 +123,13 @@
     .reset-btn{font-size:12px;color:#71717a;background:none;border:1px solid #e4e4e7;border-radius:6px;padding:3px 10px;cursor:pointer}
     .reset-btn:hover{background:#f4f4f5}
     .info-box{background:#f0fdf9;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;font-size:13px;color:#166534;margin-bottom:14px}
+    .ko-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
+    .ko-label{font-size:12px;color:#71717a;font-weight:500;margin-bottom:4px}
+    .ko-row{display:flex;gap:6px;align-items:center}
+    .ko-name{flex:1;padding:8px 10px;font-size:13px;border:1px solid #e4e4e7;border-radius:8px;background:#fafafa;color:#18181b}
+    .ko-name:focus{outline:none;border-color:#0F6E56;box-shadow:0 0 0 3px #dcfce7;background:#fff}
+    .ko-flag{width:52px;padding:8px 4px;font-size:18px;text-align:center;border:1px solid #e4e4e7;border-radius:8px;background:#fafafa}
+    .ko-flag:focus{outline:none;border-color:#0F6E56;box-shadow:0 0 0 3px #dcfce7;background:#fff}
   </style>
 </head>
 <body>
@@ -246,6 +253,10 @@
 
       <p class="section-title">Registrar resultados</p>
       <div id="admin-matches"></div>
+
+      <p class="section-title" style="margin-top:20px">Editar times das fases eliminatórias</p>
+      <div class="info-box">Atualize os nomes e bandeiras dos classificados para oitavas, quartas, semifinal e final. As alterações persistem após reiniciar.</div>
+      <div id="admin-knockout"><div class="loading">Carregando...</div></div>
 
       <p class="section-title" style="margin-top:20px">Participantes cadastrados</p>
       <div class="card" id="admin-players-card"><div class="loading">Carregando...</div></div>
@@ -588,6 +599,8 @@ async function renderAdmin(){
     `;
     el.appendChild(div);
   });
+  // Knockout editor
+  renderKnockout();
   // Jogadores
   try{
     const players=await apiFetch('/api/admin/players',{headers:{'x-admin-password':adminPw}});
@@ -629,6 +642,67 @@ async function resetPlayerPw(name){
       body:JSON.stringify({name,new_password:nova})
     });
     toast('✅ Senha de '+name+' redefinida!');
+  }catch(e){toast('❌ '+e.message);}
+}
+
+// ── Knockout editor ───────────────────────────────────────────────────────────
+async function renderKnockout(){
+  const el=document.getElementById('admin-knockout');
+  if(!el) return;
+  try{
+    const matches=await apiFetch('/api/admin/knockout-matches',{headers:{'x-admin-password':adminPw}});
+    el.innerHTML='';
+    let lastGroup='';
+    matches.forEach(m=>{
+      if(m.group!==lastGroup){
+        lastGroup=m.group;
+        const h=document.createElement('p');h.className='group-label';h.textContent=m.group;el.appendChild(h);
+      }
+      const div=document.createElement('div');div.className='card';
+      div.innerHTML=`
+        <div style="font-size:12px;color:#71717a;font-weight:600;margin-bottom:10px">${m.group} — ${m.id.toUpperCase()}</div>
+        <div class="ko-grid">
+          <div>
+            <div class="ko-label">Time da casa</div>
+            <div class="ko-row">
+              <input class="ko-name" id="ko-home-${m.id}" value="${m.home}" placeholder="Nome do time">
+              <input class="ko-flag" id="ko-hf-${m.id}" value="${m.hf}" placeholder="🏳">
+            </div>
+          </div>
+          <div>
+            <div class="ko-label">Time visitante</div>
+            <div class="ko-row">
+              <input class="ko-name" id="ko-away-${m.id}" value="${m.away}" placeholder="Nome do time">
+              <input class="ko-flag" id="ko-af-${m.id}" value="${m.af}" placeholder="🏳">
+            </div>
+          </div>
+        </div>
+        <button class="confirm-btn" onclick="saveMatchTeams('${m.id}')">Salvar times</button>
+      `;
+      el.appendChild(div);
+    });
+  }catch(e){
+    const el=document.getElementById('admin-knockout');
+    if(el) el.innerHTML='<div class="empty">Erro ao carregar jogos.</div>';
+  }
+}
+
+async function saveMatchTeams(mid){
+  const home=document.getElementById('ko-home-'+mid).value.trim();
+  const hf=document.getElementById('ko-hf-'+mid).value.trim();
+  const away=document.getElementById('ko-away-'+mid).value.trim();
+  const af=document.getElementById('ko-af-'+mid).value.trim();
+  if(!home||!away){toast('❗ Preencha os dois times');return;}
+  try{
+    await apiFetch('/api/admin/match-teams',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-admin-password':adminPw},
+      body:JSON.stringify({match_id:mid,home,hf,away,af})
+    });
+    const m=appData.matches.find(m=>m.id===mid);
+    if(m){m.home=home;m.hf=hf;m.away=away;m.af=af;}
+    toast('✅ Times atualizados!');
+    renderKnockout();
   }catch(e){toast('❌ '+e.message);}
 }
 

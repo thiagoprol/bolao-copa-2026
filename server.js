@@ -34,6 +34,15 @@ db.exec(`
     away_score INTEGER NOT NULL,
     updated_at TEXT DEFAULT (datetime('now'))
   );
+
+  CREATE TABLE IF NOT EXISTS match_overrides (
+    match_id   TEXT PRIMARY KEY,
+    home       TEXT NOT NULL,
+    hf         TEXT NOT NULL,
+    away       TEXT NOT NULL,
+    af         TEXT NOT NULL,
+    updated_at TEXT DEFAULT (datetime('now'))
+  );
 `);
 
 // ── Middlewares ───────────────────────────────────────────────────────────────
@@ -65,6 +74,12 @@ const MATCHES = [
   { id:'m12', phase:'semi',    group:'Semifinal',        home:'Venc. Q1',   hf:'🔵', away:'Venc. Q2',   af:'🔴', dt:'2026-07-11T16:00:00' },
   { id:'m13', phase:'final',   group:'Final',            home:'Semi 1',     hf:'🔵', away:'Semi 2',     af:'🔴', dt:'2026-07-14T16:00:00' },
 ];
+
+// Apply persisted overrides to MATCHES on startup
+db.prepare('SELECT * FROM match_overrides').all().forEach(o => {
+  const m = MATCHES.find(m => m.id === o.match_id);
+  if (m) { m.home = o.home; m.hf = o.hf; m.away = o.away; m.af = o.af; }
+});
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function hashPass(pass) {
@@ -240,6 +255,35 @@ app.post('/api/admin/reset-password', adminAuth, (req, res) => {
   const player = db.prepare('SELECT name FROM players WHERE name = ?').get(name);
   if (!player) return res.status(404).json({ error: 'Jogador não encontrado' });
   db.prepare('UPDATE players SET pass_hash = ? WHERE name = ?').run(hashPass(new_password), name);
+  res.json({ ok: true });
+});
+
+// Admin: listar jogos eliminatórios
+app.get('/api/admin/knockout-matches', adminAuth, (req, res) => {
+  const knockout = MATCHES.filter(m => ['oitavas','quartas','semi','final'].includes(m.phase));
+  res.json(knockout);
+});
+
+// Admin: editar times de um jogo eliminatório
+app.post('/api/admin/match-teams', adminAuth, (req, res) => {
+  const { match_id, home, hf, away, af } = req.body;
+  if (!match_id || !home || !away) return res.status(400).json({ error: 'Dados incompletos' });
+  const match = MATCHES.find(m => m.id === match_id);
+  if (!match) return res.status(404).json({ error: 'Jogo não encontrado' });
+  if (!['oitavas','quartas','semi','final'].includes(match.phase))
+    return res.status(400).json({ error: 'Apenas fases eliminatórias podem ser editadas' });
+  match.home = home;
+  match.hf = hf || '🔵';
+  match.away = away;
+  match.af = af || '🔴';
+  db.prepare(`
+    INSERT INTO match_overrides (match_id, home, hf, away, af)
+    VALUES (?, ?, ?, ?, ?)
+    ON CONFLICT(match_id) DO UPDATE SET
+      home = excluded.home, hf = excluded.hf,
+      away = excluded.away, af = excluded.af,
+      updated_at = datetime('now')
+  `).run(match_id, match.home, match.hf, match.away, match.af);
   res.json({ ok: true });
 });
 
