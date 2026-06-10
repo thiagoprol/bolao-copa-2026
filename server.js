@@ -258,6 +258,25 @@ app.post('/api/admin/reset-password', adminAuth, (req, res) => {
   res.json({ ok: true });
 });
 
+// Público: palpites de todos para jogos já encerrados (agrupados por match_id)
+app.get('/api/public/closed-palpites', (req, res) => {
+  const now = new Date();
+  const closedIds = MATCHES.filter(m => now >= new Date(m.dt)).map(m => m.id);
+  if (!closedIds.length) return res.json({});
+  const ph = closedIds.map(() => '?').join(',');
+  const rows = db.prepare(`
+    SELECT player, match_id, home_score AS h, away_score AS a
+    FROM palpites WHERE match_id IN (${ph})
+    ORDER BY match_id, player
+  `).all(...closedIds);
+  const grouped = {};
+  rows.forEach(p => {
+    if (!grouped[p.match_id]) grouped[p.match_id] = [];
+    grouped[p.match_id].push({ player: p.player, h: p.h, a: p.a });
+  });
+  res.json(grouped);
+});
+
 // Admin: todos os palpites de todos os jogadores
 app.get('/api/admin/all-palpites', adminAuth, (req, res) => {
   const palpites = db.prepare(`
