@@ -258,6 +258,15 @@ app.post('/api/admin/reset-password', adminAuth, (req, res) => {
   res.json({ ok: true });
 });
 
+// Admin: todos os palpites de todos os jogadores
+app.get('/api/admin/all-palpites', adminAuth, (req, res) => {
+  const palpites = db.prepare(`
+    SELECT player, match_id, home_score, away_score
+    FROM palpites ORDER BY player, match_id
+  `).all();
+  res.json(palpites);
+});
+
 // Admin: listar jogos eliminatórios
 app.get('/api/admin/knockout-matches', adminAuth, (req, res) => {
   const knockout = MATCHES.filter(m => ['oitavas','quartas','semi','final'].includes(m.phase));

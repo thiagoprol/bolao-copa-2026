@@ -130,6 +130,15 @@
     .ko-name:focus{outline:none;border-color:#0F6E56;box-shadow:0 0 0 3px #dcfce7;background:#fff}
     .ko-flag{width:52px;padding:8px 4px;font-size:18px;text-align:center;border:1px solid #e4e4e7;border-radius:8px;background:#fafafa}
     .ko-flag:focus{outline:none;border-color:#0F6E56;box-shadow:0 0 0 3px #dcfce7;background:#fff}
+    .filter-select{padding:7px 10px;font-size:13px;border:1px solid #e4e4e7;border-radius:8px;background:#fafafa;color:#18181b;cursor:pointer;flex:1;min-width:140px}
+    .filter-select:focus{outline:none;border-color:#0F6E56}
+    .pal-table{width:100%;border-collapse:collapse;font-size:13px}
+    .pal-table th{text-align:left;font-weight:600;color:#71717a;padding:8px 10px;border-bottom:2px solid #e4e4e7;font-size:12px;background:#fafafa;white-space:nowrap}
+    .pal-table td{padding:8px 10px;border-bottom:1px solid #f4f4f5;color:#18181b;vertical-align:middle}
+    .pal-table tbody tr:last-child td{border-bottom:none}
+    .pal-table tbody tr:hover td{background:#f9fafb}
+    .pal-score{font-weight:700;font-size:14px;text-align:center;white-space:nowrap}
+    .pal-count{font-size:12px;color:#a1a1aa;text-align:right;margin-top:8px}
   </style>
 </head>
 <body>
@@ -258,6 +267,19 @@
       <div class="info-box">Atualize os nomes e bandeiras dos classificados para oitavas, quartas, semifinal e final. As alterações persistem após reiniciar.</div>
       <div id="admin-knockout"><div class="loading">Carregando...</div></div>
 
+      <p class="section-title" style="margin-top:20px">Palpites dos participantes</p>
+      <div class="card" id="admin-palpites-card">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+          <select class="filter-select" id="filter-pal-player" onchange="renderAllPalpites()">
+            <option value="">Todos os jogadores</option>
+          </select>
+          <select class="filter-select" id="filter-pal-match" onchange="renderAllPalpites()">
+            <option value="">Todos os jogos</option>
+          </select>
+        </div>
+        <div id="palpites-table-wrap"><div class="loading">Carregando...</div></div>
+      </div>
+
       <p class="section-title" style="margin-top:20px">Participantes cadastrados</p>
       <div class="card" id="admin-players-card"><div class="loading">Carregando...</div></div>
     </div>
@@ -272,6 +294,7 @@ let appData = { matches: [], resultados: {}, phases: {} };
 let myPalpites = {};
 let currentFilter = 'todos';
 let adminPw = '';
+let allPalpitesData = [];
 let authMode = 'login'; // 'login' | 'register'
 
 // Sessão em memória (sessionStorage para persistir na aba)
@@ -601,6 +624,8 @@ async function renderAdmin(){
   });
   // Knockout editor
   renderKnockout();
+  // Palpites
+  loadAllPalpites();
   // Jogadores
   try{
     const players=await apiFetch('/api/admin/players',{headers:{'x-admin-password':adminPw}});
@@ -643,6 +668,66 @@ async function resetPlayerPw(name){
     });
     toast('✅ Senha de '+name+' redefinida!');
   }catch(e){toast('❌ '+e.message);}
+}
+
+// ── Palpites dos participantes ────────────────────────────────────────────────
+async function loadAllPalpites(){
+  if(!adminPw) return;
+  const wrap=document.getElementById('palpites-table-wrap');
+  if(!wrap) return;
+  try{
+    allPalpitesData=await apiFetch('/api/admin/all-palpites',{headers:{'x-admin-password':adminPw}});
+    // Populate player filter
+    const playerSel=document.getElementById('filter-pal-player');
+    const players=[...new Set(allPalpitesData.map(p=>p.player))].sort();
+    playerSel.innerHTML='<option value="">Todos os jogadores</option>'+
+      players.map(p=>`<option value="${p}">${p}</option>`).join('');
+    // Populate match filter
+    const matchSel=document.getElementById('filter-pal-match');
+    matchSel.innerHTML='<option value="">Todos os jogos</option>'+
+      appData.matches.map(m=>`<option value="${m.id}">${m.hf} ${m.home} × ${m.af} ${m.away}</option>`).join('');
+    renderAllPalpites();
+  }catch(e){
+    if(wrap) wrap.innerHTML='<div class="empty">Erro ao carregar palpites.</div>';
+  }
+}
+
+function renderAllPalpites(){
+  const wrap=document.getElementById('palpites-table-wrap');
+  if(!wrap) return;
+  const playerFilter=document.getElementById('filter-pal-player').value;
+  const matchFilter=document.getElementById('filter-pal-match').value;
+  let filtered=allPalpitesData;
+  if(playerFilter) filtered=filtered.filter(p=>p.player===playerFilter);
+  if(matchFilter) filtered=filtered.filter(p=>p.match_id===matchFilter);
+  if(!filtered.length){
+    wrap.innerHTML='<div class="empty">Nenhum palpite encontrado.</div>';
+    return;
+  }
+  const rows=filtered.map(p=>{
+    const m=appData.matches.find(m=>m.id===p.match_id);
+    const matchLabel=m?`${m.hf} ${m.home} × ${m.af} ${m.away}`:p.match_id;
+    const r=appData.resultados[p.match_id];
+    let ptsHtml='<span style="color:#a1a1aa;font-size:12px">–</span>';
+    if(r&&m){
+      const raw=calcPts(p.home_score,p.away_score,r.h,r.a);
+      const mult=appData.phases[m.phase].mult;
+      ptsHtml=ptsPill(raw,mult);
+    }
+    return `<tr>
+      <td style="font-weight:500;white-space:nowrap">${p.player}</td>
+      <td style="color:#52525b;font-size:12px">${matchLabel}</td>
+      <td class="pal-score">${p.home_score} × ${p.away_score}</td>
+      <td>${ptsHtml}</td>
+    </tr>`;
+  }).join('');
+  wrap.innerHTML=`
+    <table class="pal-table">
+      <thead><tr><th>Jogador</th><th>Jogo</th><th style="text-align:center">Palpite</th><th>Pontos</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <div class="pal-count">${filtered.length} palpite(s)</div>
+  `;
 }
 
 // ── Knockout editor ───────────────────────────────────────────────────────────
