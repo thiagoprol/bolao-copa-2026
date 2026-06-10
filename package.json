@@ -1,0 +1,15 @@
+{
+  "name": "bolao-copa-2026",
+  "version": "1.0.0",
+  "description": "Bolão da Copa do Mundo para empresas",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.6.0",
+    "cors": "^2.8.6",
+    "express": "^4.22.2"
+  }
+}
