@@ -62,8 +62,8 @@ const PHASES = {
 
 const MATCHES = [
   // ── FASE DE GRUPOS ────────────────────────────────────────────────────────
-  { id:'g01', phase:'grupos', group:'Grupo A', home:'México',             hf:'🇲🇽', away:'África do Sul',       af:'🇿🇦', dt:'2026-06-11T20:00:00Z' },
-  { id:'g04', phase:'grupos', group:'Grupo A', home:'Coreia do Sul',      hf:'🇰🇷', away:'Tchéquia',            af:'🇨🇿', dt:'2026-06-12T03:00:00Z' },
+  { id:'g01', phase:'grupos', group:'Grupo A', home:'México',             hf:'🇲🇽', away:'África do Sul',       af:'🇿🇦', dt:'2026-06-11T19:00:00Z' },
+  { id:'g04', phase:'grupos', group:'Grupo A', home:'Coreia do Sul',      hf:'🇰🇷', away:'Tchéquia',            af:'🇨🇿', dt:'2026-06-12T02:00:00Z' },
   { id:'g02', phase:'grupos', group:'Grupo B', home:'Canadá',             hf:'🇨🇦', away:'Bósnia e Herzegovina', af:'🇧🇦', dt:'2026-06-12T19:00:00Z' },
   { id:'g05', phase:'grupos', group:'Grupo B', home:'Catar',              hf:'🇶🇦', away:'Suíça',               af:'🇨🇭', dt:'2026-06-13T03:00:00Z' },
   { id:'g06', phase:'grupos', group:'Grupo C', home:'Brasil',             hf:'🇧🇷', away:'Marrocos',            af:'🇲🇦', dt:'2026-06-13T03:00:00Z' },
