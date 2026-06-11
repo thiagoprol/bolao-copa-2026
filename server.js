@@ -60,80 +60,101 @@ const PHASES = {
   final:   { label: 'Final',            mult: 5 },
 };
 
+// Todos os horários em UTC. BRT = UTC-3.
+// Ex: 16:00 BRT = 19:00 UTC | 23:00 BRT = 02:00 UTC do dia seguinte
 const MATCHES = [
-  // ── FASE DE GRUPOS ────────────────────────────────────────────────────────
-  { id:'g01', phase:'grupos', group:'Grupo A', home:'México',             hf:'🇲🇽', away:'África do Sul',       af:'🇿🇦', dt:'2026-06-11T19:00:00Z' },
-  { id:'g04', phase:'grupos', group:'Grupo A', home:'Coreia do Sul',      hf:'🇰🇷', away:'Tchéquia',            af:'🇨🇿', dt:'2026-06-12T02:00:00Z' },
-  { id:'g02', phase:'grupos', group:'Grupo B', home:'Canadá',             hf:'🇨🇦', away:'Bósnia e Herzegovina', af:'🇧🇦', dt:'2026-06-12T19:00:00Z' },
-  { id:'g05', phase:'grupos', group:'Grupo B', home:'Catar',              hf:'🇶🇦', away:'Suíça',               af:'🇨🇭', dt:'2026-06-13T03:00:00Z' },
-  { id:'g06', phase:'grupos', group:'Grupo C', home:'Brasil',             hf:'🇧🇷', away:'Marrocos',            af:'🇲🇦', dt:'2026-06-13T03:00:00Z' },
-  { id:'g03', phase:'grupos', group:'Grupo D', home:'EUA',                hf:'🇺🇸', away:'Paraguai',            af:'🇵🇾', dt:'2026-06-13T04:00:00Z' },
-  { id:'g08', phase:'grupos', group:'Grupo D', home:'Austrália',          hf:'🇦🇺', away:'Turquia',             af:'🇹🇷', dt:'2026-06-14T00:00:00Z' },
-  { id:'g07', phase:'grupos', group:'Grupo C', home:'Haiti',              hf:'🇭🇹', away:'Escócia',             af:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', dt:'2026-06-14T01:00:00Z' },
-  { id:'g09', phase:'grupos', group:'Grupo E', home:'Alemanha',           hf:'🇩🇪', away:'Curaçao',             af:'🇨🇼', dt:'2026-06-14T17:00:00Z' },
-  { id:'g10', phase:'grupos', group:'Grupo F', home:'Holanda',            hf:'🇳🇱', away:'Japão',               af:'🇯🇵', dt:'2026-06-14T20:00:00Z' },
-  { id:'g11', phase:'grupos', group:'Grupo E', home:'Costa do Marfim',    hf:'🇨🇮', away:'Equador',             af:'🇪🇨', dt:'2026-06-14T23:00:00Z' },
-  { id:'g12', phase:'grupos', group:'Grupo F', home:'Suécia',             hf:'🇸🇪', away:'Tunísia',             af:'🇹🇳', dt:'2026-06-15T01:00:00Z' },
-  { id:'g13', phase:'grupos', group:'Grupo H', home:'Espanha',            hf:'🇪🇸', away:'Cabo Verde',          af:'🇨🇻', dt:'2026-06-15T16:00:00Z' },
-  { id:'g14', phase:'grupos', group:'Grupo G', home:'Bélgica',            hf:'🇧🇪', away:'Egito',               af:'🇪🇬', dt:'2026-06-15T22:00:00Z' },
-  { id:'g15', phase:'grupos', group:'Grupo H', home:'Arábia Saudita',     hf:'🇸🇦', away:'Uruguai',             af:'🇺🇾', dt:'2026-06-15T22:00:00Z' },
-  { id:'g16', phase:'grupos', group:'Grupo G', home:'Irã',                hf:'🇮🇷', away:'Nova Zelândia',       af:'🇳🇿', dt:'2026-06-16T04:00:00Z' },
-  { id:'g17', phase:'grupos', group:'Grupo I', home:'França',             hf:'🇫🇷', away:'Senegal',             af:'🇸🇳', dt:'2026-06-16T19:00:00Z' },
-  { id:'g18', phase:'grupos', group:'Grupo I', home:'Iraque',             hf:'🇮🇶', away:'Noruega',             af:'🇳🇴', dt:'2026-06-16T22:00:00Z' },
-  { id:'g19', phase:'grupos', group:'Grupo J', home:'Argentina',          hf:'🇦🇷', away:'Argélia',             af:'🇩🇿', dt:'2026-06-17T02:00:00Z' },
-  { id:'g20', phase:'grupos', group:'Grupo J', home:'Áustria',            hf:'🇦🇹', away:'Jordânia',            af:'🇯🇴', dt:'2026-06-17T04:00:00Z' },
-  { id:'g21', phase:'grupos', group:'Grupo K', home:'Portugal',           hf:'🇵🇹', away:'Congo DR',            af:'🇨🇩', dt:'2026-06-17T17:00:00Z' },
-  { id:'g22', phase:'grupos', group:'Grupo L', home:'Inglaterra',         hf:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', away:'Croácia',            af:'🇭🇷', dt:'2026-06-17T20:00:00Z' },
-  { id:'g23', phase:'grupos', group:'Grupo L', home:'Gana',               hf:'🇬🇭', away:'Panamá',              af:'🇵🇦', dt:'2026-06-17T23:00:00Z' },
-  { id:'g24', phase:'grupos', group:'Grupo K', home:'Uzbequistão',        hf:'🇺🇿', away:'Colômbia',            af:'🇨🇴', dt:'2026-06-18T01:00:00Z' },
-  { id:'g25', phase:'grupos', group:'Grupo A', home:'Tchéquia',           hf:'🇨🇿', away:'África do Sul',       af:'🇿🇦', dt:'2026-06-18T16:00:00Z' },
-  { id:'g26', phase:'grupos', group:'Grupo B', home:'Suíça',              hf:'🇨🇭', away:'Bósnia e Herzegovina', af:'🇧🇦', dt:'2026-06-18T19:00:00Z' },
-  { id:'g27', phase:'grupos', group:'Grupo B', home:'Canadá',             hf:'🇨🇦', away:'Catar',               af:'🇶🇦', dt:'2026-06-18T22:00:00Z' },
-  { id:'g28', phase:'grupos', group:'Grupo A', home:'México',             hf:'🇲🇽', away:'Coreia do Sul',       af:'🇰🇷', dt:'2026-06-19T02:00:00Z' },
-  { id:'g29', phase:'grupos', group:'Grupo D', home:'EUA',                hf:'🇺🇸', away:'Austrália',           af:'🇦🇺', dt:'2026-06-19T19:00:00Z' },
-  { id:'g30', phase:'grupos', group:'Grupo C', home:'Escócia',            hf:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', away:'Marrocos',           af:'🇲🇦', dt:'2026-06-19T22:00:00Z' },
-  { id:'g31', phase:'grupos', group:'Grupo C', home:'Brasil',             hf:'🇧🇷', away:'Haiti',               af:'🇭🇹', dt:'2026-06-20T01:00:00Z' },
-  { id:'g32', phase:'grupos', group:'Grupo D', home:'Turquia',            hf:'🇹🇷', away:'Paraguai',            af:'🇵🇾', dt:'2026-06-20T04:00:00Z' },
-  { id:'g34', phase:'grupos', group:'Grupo E', home:'Alemanha',           hf:'🇩🇪', away:'Costa do Marfim',     af:'🇨🇮', dt:'2026-06-20T20:00:00Z' },
-  { id:'g33', phase:'grupos', group:'Grupo H', home:'Espanha',            hf:'🇪🇸', away:'Arábia Saudita',      af:'🇸🇦', dt:'2026-06-21T16:00:00Z' },
-  { id:'g35', phase:'grupos', group:'Grupo F', home:'Holanda',            hf:'🇳🇱', away:'Suécia',              af:'🇸🇪', dt:'2026-06-21T22:00:00Z' },
-  { id:'g36', phase:'grupos', group:'Grupo G', home:'Bélgica',            hf:'🇧🇪', away:'Irã',                 af:'🇮🇷', dt:'2026-06-21T22:00:00Z' },
-  { id:'g39', phase:'grupos', group:'Grupo H', home:'Uruguai',            hf:'🇺🇾', away:'Cabo Verde',          af:'🇨🇻', dt:'2026-06-21T22:00:00Z' },
-  { id:'g37', phase:'grupos', group:'Grupo E', home:'Equador',            hf:'🇪🇨', away:'Curaçao',             af:'🇨🇼', dt:'2026-06-22T02:00:00Z' },
-  { id:'g38', phase:'grupos', group:'Grupo F', home:'Japão',              hf:'🇯🇵', away:'Tunísia',             af:'🇹🇳', dt:'2026-06-22T04:00:00Z' },
-  { id:'g40', phase:'grupos', group:'Grupo G', home:'Nova Zelândia',      hf:'🇳🇿', away:'Egito',               af:'🇪🇬', dt:'2026-06-22T04:00:00Z' },
-  { id:'g41', phase:'grupos', group:'Grupo J', home:'Argentina',          hf:'🇦🇷', away:'Áustria',             af:'🇦🇹', dt:'2026-06-22T18:00:00Z' },
-  { id:'g42', phase:'grupos', group:'Grupo I', home:'França',             hf:'🇫🇷', away:'Iraque',              af:'🇮🇶', dt:'2026-06-22T21:00:00Z' },
-  { id:'g43', phase:'grupos', group:'Grupo I', home:'Noruega',            hf:'🇳🇴', away:'Senegal',             af:'🇸🇳', dt:'2026-06-23T00:00:00Z' },
-  { id:'g44', phase:'grupos', group:'Grupo J', home:'Jordânia',           hf:'🇯🇴', away:'Argélia',             af:'🇩🇿', dt:'2026-06-23T06:00:00Z' },
-  { id:'g46', phase:'grupos', group:'Grupo L', home:'Inglaterra',         hf:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', away:'Gana',               af:'🇬🇭', dt:'2026-06-23T20:00:00Z' },
-  { id:'g45', phase:'grupos', group:'Grupo K', home:'Portugal',           hf:'🇵🇹', away:'Uzbequistão',         af:'🇺🇿', dt:'2026-06-24T00:00:00Z' },
-  { id:'g47', phase:'grupos', group:'Grupo L', home:'Panamá',             hf:'🇵🇦', away:'Croácia',             af:'🇭🇷', dt:'2026-06-24T01:00:00Z' },
-  { id:'g48', phase:'grupos', group:'Grupo K', home:'Colômbia',           hf:'🇨🇴', away:'Congo DR',            af:'🇨🇩', dt:'2026-06-24T02:00:00Z' },
-  { id:'g49', phase:'grupos', group:'Grupo A', home:'Tchéquia',           hf:'🇨🇿', away:'México',              af:'🇲🇽', dt:'2026-06-24T20:00:00Z' },
-  { id:'g50', phase:'grupos', group:'Grupo A', home:'África do Sul',      hf:'🇿🇦', away:'Coreia do Sul',       af:'🇰🇷', dt:'2026-06-24T20:00:00Z' },
-  { id:'g64', phase:'grupos', group:'Grupo B', home:'Bósnia e Herzegovina', hf:'🇧🇦', away:'Catar',             af:'🇶🇦', dt:'2026-06-24T22:00:00Z' },
-  { id:'g65', phase:'grupos', group:'Grupo C', home:'Marrocos',           hf:'🇲🇦', away:'Haiti',               af:'🇭🇹', dt:'2026-06-24T22:00:00Z' },
-  { id:'g66', phase:'grupos', group:'Grupo C', home:'Escócia',            hf:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', away:'Brasil',             af:'🇧🇷', dt:'2026-06-24T22:00:00Z' },
-  { id:'g63', phase:'grupos', group:'Grupo B', home:'Suíça',              hf:'🇨🇭', away:'Canadá',              af:'🇨🇦', dt:'2026-06-25T01:00:00Z' },
-  { id:'g55', phase:'grupos', group:'Grupo D', home:'Turquia',            hf:'🇹🇷', away:'EUA',                 af:'🇺🇸', dt:'2026-06-25T19:00:00Z' },
-  { id:'g51', phase:'grupos', group:'Grupo E', home:'Equador',            hf:'🇪🇨', away:'Alemanha',            af:'🇩🇪', dt:'2026-06-25T22:00:00Z' },
-  { id:'g56', phase:'grupos', group:'Grupo D', home:'Paraguai',           hf:'🇵🇾', away:'Austrália',           af:'🇦🇺', dt:'2026-06-25T22:00:00Z' },
-  { id:'g52', phase:'grupos', group:'Grupo E', home:'Curaçao',            hf:'🇨🇼', away:'Costa do Marfim',     af:'🇨🇮', dt:'2026-06-25T23:00:00Z' },
-  { id:'g53', phase:'grupos', group:'Grupo F', home:'Japão',              hf:'🇯🇵', away:'Suécia',              af:'🇸🇪', dt:'2026-06-25T23:00:00Z' },
-  { id:'g54', phase:'grupos', group:'Grupo F', home:'Tunísia',            hf:'🇹🇳', away:'Holanda',             af:'🇳🇱', dt:'2026-06-25T23:00:00Z' },
-  { id:'g59', phase:'grupos', group:'Grupo H', home:'Cabo Verde',         hf:'🇨🇻', away:'Arábia Saudita',      af:'🇸🇦', dt:'2026-06-26T22:00:00Z' },
-  { id:'g60', phase:'grupos', group:'Grupo H', home:'Uruguai',            hf:'🇺🇾', away:'Espanha',             af:'🇪🇸', dt:'2026-06-26T22:00:00Z' },
-  { id:'g61', phase:'grupos', group:'Grupo G', home:'Egito',              hf:'🇪🇬', away:'Irã',                 af:'🇮🇷', dt:'2026-06-26T22:00:00Z' },
-  { id:'g62', phase:'grupos', group:'Grupo G', home:'Nova Zelândia',      hf:'🇳🇿', away:'Bélgica',             af:'🇧🇪', dt:'2026-06-26T22:00:00Z' },
-  { id:'g57', phase:'grupos', group:'Grupo I', home:'Noruega',            hf:'🇳🇴', away:'França',              af:'🇫🇷', dt:'2026-06-27T01:00:00Z' },
-  { id:'g58', phase:'grupos', group:'Grupo I', home:'Senegal',            hf:'🇸🇳', away:'Iraque',              af:'🇮🇶', dt:'2026-06-27T01:00:00Z' },
-  { id:'g67', phase:'grupos', group:'Grupo J', home:'Argentina',          hf:'🇦🇷', away:'Jordânia',            af:'🇯🇴', dt:'2026-06-27T20:00:00Z' },
-  { id:'g68', phase:'grupos', group:'Grupo J', home:'Áustria',            hf:'🇦🇹', away:'Argélia',             af:'🇩🇿', dt:'2026-06-27T20:00:00Z' },
-  { id:'g70', phase:'grupos', group:'Grupo K', home:'Congo DR',           hf:'🇨🇩', away:'Uzbequistão',         af:'🇺🇿', dt:'2026-06-27T22:00:00Z' },
-  { id:'g69', phase:'grupos', group:'Grupo K', home:'Portugal',           hf:'🇵🇹', away:'Colômbia',            af:'🇨🇴', dt:'2026-06-27T23:00:00Z' },
-  { id:'g71', phase:'grupos', group:'Grupo L', home:'Inglaterra',         hf:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', away:'Panamá',             af:'🇵🇦', dt:'2026-06-28T01:00:00Z' },
-  { id:'g72', phase:'grupos', group:'Grupo L', home:'Croácia',            hf:'🇭🇷', away:'Gana',                af:'🇬🇭', dt:'2026-06-28T01:00:00Z' },
+  // ── RODADA 1 ─────────────────────────────────────────────────────────────
+  // 11/jun
+  { id:'g01', phase:'grupos', group:'Grupo A', home:'México',               hf:'🇲🇽', away:'África do Sul',        af:'🇿🇦', dt:'2026-06-11T19:00:00Z' }, // 16:00 BRT
+  { id:'g04', phase:'grupos', group:'Grupo A', home:'Coreia do Sul',        hf:'🇰🇷', away:'Tchéquia',             af:'🇨🇿', dt:'2026-06-12T02:00:00Z' }, // 23:00 BRT
+  // 12/jun
+  { id:'g02', phase:'grupos', group:'Grupo B', home:'Canadá',               hf:'🇨🇦', away:'Bósnia e Herzegovina',  af:'🇧🇦', dt:'2026-06-12T19:00:00Z' }, // 16:00 BRT
+  { id:'g03', phase:'grupos', group:'Grupo D', home:'EUA',                  hf:'🇺🇸', away:'Paraguai',             af:'🇵🇾', dt:'2026-06-13T01:00:00Z' }, // 22:00 BRT
+  // 13/jun
+  { id:'g05', phase:'grupos', group:'Grupo B', home:'Catar',                hf:'🇶🇦', away:'Suíça',                af:'🇨🇭', dt:'2026-06-13T19:00:00Z' }, // 16:00 BRT
+  { id:'g06', phase:'grupos', group:'Grupo C', home:'Brasil',               hf:'🇧🇷', away:'Marrocos',             af:'🇲🇦', dt:'2026-06-13T22:00:00Z' }, // 19:00 BRT
+  { id:'g07', phase:'grupos', group:'Grupo C', home:'Haiti',                hf:'🇭🇹', away:'Escócia',              af:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', dt:'2026-06-14T01:00:00Z' }, // 22:00 BRT
+  { id:'g08', phase:'grupos', group:'Grupo D', home:'Austrália',            hf:'🇦🇺', away:'Turquia',              af:'🇹🇷', dt:'2026-06-14T04:00:00Z' }, // 01:00 BRT
+  // 14/jun
+  { id:'g09', phase:'grupos', group:'Grupo E', home:'Alemanha',             hf:'🇩🇪', away:'Curaçao',              af:'🇨🇼', dt:'2026-06-14T17:00:00Z' }, // 14:00 BRT
+  { id:'g10', phase:'grupos', group:'Grupo F', home:'Holanda',              hf:'🇳🇱', away:'Japão',                af:'🇯🇵', dt:'2026-06-14T20:00:00Z' }, // 17:00 BRT
+  { id:'g11', phase:'grupos', group:'Grupo E', home:'Costa do Marfim',      hf:'🇨🇮', away:'Equador',              af:'🇪🇨', dt:'2026-06-14T23:00:00Z' }, // 20:00 BRT
+  { id:'g12', phase:'grupos', group:'Grupo F', home:'Suécia',               hf:'🇸🇪', away:'Tunísia',              af:'🇹🇳', dt:'2026-06-15T02:00:00Z' }, // 23:00 BRT
+  // 15/jun
+  { id:'g13', phase:'grupos', group:'Grupo H', home:'Espanha',              hf:'🇪🇸', away:'Cabo Verde',           af:'🇨🇻', dt:'2026-06-15T16:00:00Z' }, // 13:00 BRT
+  { id:'g14', phase:'grupos', group:'Grupo G', home:'Bélgica',              hf:'🇧🇪', away:'Egito',                af:'🇪🇬', dt:'2026-06-15T22:00:00Z' }, // 19:00 BRT
+  { id:'g15', phase:'grupos', group:'Grupo H', home:'Arábia Saudita',       hf:'🇸🇦', away:'Uruguai',              af:'🇺🇾', dt:'2026-06-15T22:00:00Z' }, // 19:00 BRT
+  { id:'g16', phase:'grupos', group:'Grupo G', home:'Irã',                  hf:'🇮🇷', away:'Nova Zelândia',        af:'🇳🇿', dt:'2026-06-16T04:00:00Z' }, // 01:00 BRT
+  // 16/jun
+  { id:'g17', phase:'grupos', group:'Grupo I', home:'França',               hf:'🇫🇷', away:'Senegal',              af:'🇸🇳', dt:'2026-06-16T19:00:00Z' }, // 16:00 BRT
+  { id:'g18', phase:'grupos', group:'Grupo I', home:'Iraque',               hf:'🇮🇶', away:'Noruega',              af:'🇳🇴', dt:'2026-06-16T22:00:00Z' }, // 19:00 BRT
+  { id:'g19', phase:'grupos', group:'Grupo J', home:'Argentina',            hf:'🇦🇷', away:'Argélia',              af:'🇩🇿', dt:'2026-06-17T01:00:00Z' }, // 22:00 BRT
+  { id:'g20', phase:'grupos', group:'Grupo J', home:'Áustria',              hf:'🇦🇹', away:'Jordânia',             af:'🇯🇴', dt:'2026-06-17T04:00:00Z' }, // 01:00 BRT
+  // 17/jun
+  { id:'g21', phase:'grupos', group:'Grupo K', home:'Portugal',             hf:'🇵🇹', away:'Congo DR',             af:'🇨🇩', dt:'2026-06-17T17:00:00Z' }, // 14:00 BRT
+  { id:'g22', phase:'grupos', group:'Grupo L', home:'Inglaterra',           hf:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', away:'Croácia',             af:'🇭🇷', dt:'2026-06-17T20:00:00Z' }, // 17:00 BRT
+  { id:'g23', phase:'grupos', group:'Grupo L', home:'Gana',                 hf:'🇬🇭', away:'Panamá',               af:'🇵🇦', dt:'2026-06-17T23:00:00Z' }, // 20:00 BRT
+  { id:'g24', phase:'grupos', group:'Grupo K', home:'Uzbequistão',          hf:'🇺🇿', away:'Colômbia',             af:'🇨🇴', dt:'2026-06-18T02:00:00Z' }, // 23:00 BRT
+  // ── RODADA 2 ─────────────────────────────────────────────────────────────
+  // 18/jun
+  { id:'g25', phase:'grupos', group:'Grupo A', home:'Tchéquia',             hf:'🇨🇿', away:'África do Sul',        af:'🇿🇦', dt:'2026-06-18T16:00:00Z' }, // 13:00 BRT
+  { id:'g26', phase:'grupos', group:'Grupo B', home:'Suíça',                hf:'🇨🇭', away:'Bósnia e Herzegovina',  af:'🇧🇦', dt:'2026-06-18T19:00:00Z' }, // 16:00 BRT
+  { id:'g27', phase:'grupos', group:'Grupo B', home:'Canadá',               hf:'🇨🇦', away:'Catar',                af:'🇶🇦', dt:'2026-06-18T22:00:00Z' }, // 19:00 BRT
+  { id:'g28', phase:'grupos', group:'Grupo A', home:'México',               hf:'🇲🇽', away:'Coreia do Sul',        af:'🇰🇷', dt:'2026-06-19T02:00:00Z' }, // 23:00 BRT
+  // 19/jun
+  { id:'g29', phase:'grupos', group:'Grupo D', home:'EUA',                  hf:'🇺🇸', away:'Austrália',            af:'🇦🇺', dt:'2026-06-19T19:00:00Z' }, // 16:00 BRT
+  { id:'g30', phase:'grupos', group:'Grupo C', home:'Escócia',              hf:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', away:'Marrocos',            af:'🇲🇦', dt:'2026-06-19T22:00:00Z' }, // 19:00 BRT
+  { id:'g31', phase:'grupos', group:'Grupo C', home:'Brasil',               hf:'🇧🇷', away:'Haiti',                af:'🇭🇹', dt:'2026-06-20T01:00:00Z' }, // 22:00 BRT
+  { id:'g32', phase:'grupos', group:'Grupo D', home:'Turquia',              hf:'🇹🇷', away:'Paraguai',             af:'🇵🇾', dt:'2026-06-20T04:00:00Z' }, // 01:00 BRT
+  // 20/jun
+  { id:'g34', phase:'grupos', group:'Grupo E', home:'Alemanha',             hf:'🇩🇪', away:'Costa do Marfim',      af:'🇨🇮', dt:'2026-06-20T20:00:00Z' }, // 17:00 BRT
+  // 21/jun
+  { id:'g33', phase:'grupos', group:'Grupo H', home:'Espanha',              hf:'🇪🇸', away:'Arábia Saudita',       af:'🇸🇦', dt:'2026-06-21T16:00:00Z' }, // 13:00 BRT
+  { id:'g35', phase:'grupos', group:'Grupo F', home:'Holanda',              hf:'🇳🇱', away:'Suécia',               af:'🇸🇪', dt:'2026-06-21T22:00:00Z' }, // 19:00 BRT
+  { id:'g36', phase:'grupos', group:'Grupo G', home:'Bélgica',              hf:'🇧🇪', away:'Irã',                  af:'🇮🇷', dt:'2026-06-21T22:00:00Z' }, // 19:00 BRT
+  { id:'g39', phase:'grupos', group:'Grupo H', home:'Uruguai',              hf:'🇺🇾', away:'Cabo Verde',           af:'🇨🇻', dt:'2026-06-21T22:00:00Z' }, // 19:00 BRT
+  { id:'g37', phase:'grupos', group:'Grupo E', home:'Equador',              hf:'🇪🇨', away:'Curaçao',              af:'🇨🇼', dt:'2026-06-22T02:00:00Z' }, // 23:00 BRT
+  { id:'g38', phase:'grupos', group:'Grupo F', home:'Japão',                hf:'🇯🇵', away:'Tunísia',              af:'🇹🇳', dt:'2026-06-22T04:00:00Z' }, // 01:00 BRT
+  { id:'g40', phase:'grupos', group:'Grupo G', home:'Nova Zelândia',        hf:'🇳🇿', away:'Egito',                af:'🇪🇬', dt:'2026-06-22T04:00:00Z' }, // 01:00 BRT
+  // 22/jun
+  { id:'g41', phase:'grupos', group:'Grupo J', home:'Argentina',            hf:'🇦🇷', away:'Áustria',              af:'🇦🇹', dt:'2026-06-22T18:00:00Z' }, // 15:00 BRT
+  { id:'g42', phase:'grupos', group:'Grupo I', home:'França',               hf:'🇫🇷', away:'Iraque',               af:'🇮🇶', dt:'2026-06-22T21:00:00Z' }, // 18:00 BRT
+  { id:'g43', phase:'grupos', group:'Grupo I', home:'Noruega',              hf:'🇳🇴', away:'Senegal',              af:'🇸🇳', dt:'2026-06-23T00:00:00Z' }, // 21:00 BRT
+  { id:'g44', phase:'grupos', group:'Grupo J', home:'Jordânia',             hf:'🇯🇴', away:'Argélia',              af:'🇩🇿', dt:'2026-06-23T06:00:00Z' }, // 03:00 BRT
+  // 23/jun
+  { id:'g46', phase:'grupos', group:'Grupo L', home:'Inglaterra',           hf:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', away:'Gana',                af:'🇬🇭', dt:'2026-06-23T20:00:00Z' }, // 17:00 BRT
+  { id:'g45', phase:'grupos', group:'Grupo K', home:'Portugal',             hf:'🇵🇹', away:'Uzbequistão',          af:'🇺🇿', dt:'2026-06-24T00:00:00Z' }, // 21:00 BRT
+  { id:'g47', phase:'grupos', group:'Grupo L', home:'Panamá',               hf:'🇵🇦', away:'Croácia',              af:'🇭🇷', dt:'2026-06-24T01:00:00Z' }, // 22:00 BRT
+  { id:'g48', phase:'grupos', group:'Grupo K', home:'Colômbia',             hf:'🇨🇴', away:'Congo DR',             af:'🇨🇩', dt:'2026-06-24T02:00:00Z' }, // 23:00 BRT
+  // ── RODADA 3 ─────────────────────────────────────────────────────────────
+  // 24/jun
+  { id:'g49', phase:'grupos', group:'Grupo A', home:'Tchéquia',             hf:'🇨🇿', away:'México',               af:'🇲🇽', dt:'2026-06-24T20:00:00Z' }, // 17:00 BRT
+  { id:'g50', phase:'grupos', group:'Grupo A', home:'África do Sul',        hf:'🇿🇦', away:'Coreia do Sul',        af:'🇰🇷', dt:'2026-06-24T20:00:00Z' }, // 17:00 BRT
+  { id:'g64', phase:'grupos', group:'Grupo B', home:'Bósnia e Herzegovina', hf:'🇧🇦', away:'Catar',                af:'🇶🇦', dt:'2026-06-24T22:00:00Z' }, // 19:00 BRT
+  { id:'g65', phase:'grupos', group:'Grupo C', home:'Marrocos',             hf:'🇲🇦', away:'Haiti',                af:'🇭🇹', dt:'2026-06-24T22:00:00Z' }, // 19:00 BRT
+  { id:'g66', phase:'grupos', group:'Grupo C', home:'Escócia',              hf:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', away:'Brasil',              af:'🇧🇷', dt:'2026-06-24T22:00:00Z' }, // 19:00 BRT
+  { id:'g63', phase:'grupos', group:'Grupo B', home:'Suíça',                hf:'🇨🇭', away:'Canadá',               af:'🇨🇦', dt:'2026-06-25T01:00:00Z' }, // 22:00 BRT
+  // 25/jun
+  { id:'g55', phase:'grupos', group:'Grupo D', home:'Turquia',              hf:'🇹🇷', away:'EUA',                  af:'🇺🇸', dt:'2026-06-25T19:00:00Z' }, // 16:00 BRT
+  { id:'g51', phase:'grupos', group:'Grupo E', home:'Equador',              hf:'🇪🇨', away:'Alemanha',             af:'🇩🇪', dt:'2026-06-25T22:00:00Z' }, // 19:00 BRT
+  { id:'g56', phase:'grupos', group:'Grupo D', home:'Paraguai',             hf:'🇵🇾', away:'Austrália',            af:'🇦🇺', dt:'2026-06-25T22:00:00Z' }, // 19:00 BRT
+  { id:'g52', phase:'grupos', group:'Grupo E', home:'Curaçao',              hf:'🇨🇼', away:'Costa do Marfim',      af:'🇨🇮', dt:'2026-06-25T23:00:00Z' }, // 20:00 BRT
+  { id:'g53', phase:'grupos', group:'Grupo F', home:'Japão',                hf:'🇯🇵', away:'Suécia',               af:'🇸🇪', dt:'2026-06-25T23:00:00Z' }, // 20:00 BRT
+  { id:'g54', phase:'grupos', group:'Grupo F', home:'Tunísia',              hf:'🇹🇳', away:'Holanda',              af:'🇳🇱', dt:'2026-06-25T23:00:00Z' }, // 20:00 BRT
+  // 26/jun
+  { id:'g59', phase:'grupos', group:'Grupo H', home:'Cabo Verde',           hf:'🇨🇻', away:'Arábia Saudita',       af:'🇸🇦', dt:'2026-06-26T22:00:00Z' }, // 19:00 BRT
+  { id:'g60', phase:'grupos', group:'Grupo H', home:'Uruguai',              hf:'🇺🇾', away:'Espanha',              af:'🇪🇸', dt:'2026-06-26T22:00:00Z' }, // 19:00 BRT
+  { id:'g61', phase:'grupos', group:'Grupo G', home:'Egito',                hf:'🇪🇬', away:'Irã',                  af:'🇮🇷', dt:'2026-06-26T22:00:00Z' }, // 19:00 BRT
+  { id:'g62', phase:'grupos', group:'Grupo G', home:'Nova Zelândia',        hf:'🇳🇿', away:'Bélgica',              af:'🇧🇪', dt:'2026-06-26T22:00:00Z' }, // 19:00 BRT
+  { id:'g57', phase:'grupos', group:'Grupo I', home:'Noruega',              hf:'🇳🇴', away:'França',               af:'🇫🇷', dt:'2026-06-27T01:00:00Z' }, // 22:00 BRT
+  { id:'g58', phase:'grupos', group:'Grupo I', home:'Senegal',              hf:'🇸🇳', away:'Iraque',               af:'🇮🇶', dt:'2026-06-27T01:00:00Z' }, // 22:00 BRT
+  // 27/jun
+  { id:'g67', phase:'grupos', group:'Grupo J', home:'Argentina',            hf:'🇦🇷', away:'Jordânia',             af:'🇯🇴', dt:'2026-06-27T20:00:00Z' }, // 17:00 BRT
+  { id:'g68', phase:'grupos', group:'Grupo J', home:'Áustria',              hf:'🇦🇹', away:'Argélia',              af:'🇩🇿', dt:'2026-06-27T20:00:00Z' }, // 17:00 BRT
+  { id:'g70', phase:'grupos', group:'Grupo K', home:'Congo DR',             hf:'🇨🇩', away:'Uzbequistão',          af:'🇺🇿', dt:'2026-06-27T22:00:00Z' }, // 19:00 BRT
+  { id:'g69', phase:'grupos', group:'Grupo K', home:'Portugal',             hf:'🇵🇹', away:'Colômbia',             af:'🇨🇴', dt:'2026-06-27T23:00:00Z' }, // 20:00 BRT
+  { id:'g71', phase:'grupos', group:'Grupo L', home:'Inglaterra',           hf:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', away:'Panamá',              af:'🇵🇦', dt:'2026-06-28T01:00:00Z' }, // 22:00 BRT
+  { id:'g72', phase:'grupos', group:'Grupo L', home:'Croácia',              hf:'🇭🇷', away:'Gana',                 af:'🇬🇭', dt:'2026-06-28T01:00:00Z' }, // 22:00 BRT
   // ── FASE ELIMINATÓRIA ─────────────────────────────────────────────────────
   { id:'m09', phase:'oitavas', group:'Oitavas de final', home:'1º Grupo A', hf:'🔵', away:'2º Grupo B', af:'🔴', dt:'2026-07-01T19:00:00Z' },
   { id:'m10', phase:'oitavas', group:'Oitavas de final', home:'1º Grupo B', hf:'🔵', away:'2º Grupo A', af:'🔴', dt:'2026-07-02T19:00:00Z' },
@@ -171,13 +192,11 @@ function authPlayer(name, pass) {
 
 // ── Rotas de autenticação ─────────────────────────────────────────────────────
 
-// Verifica se jogador existe
 app.get('/api/player/:name', (req, res) => {
   const player = db.prepare('SELECT name FROM players WHERE name = ?').get(req.params.name);
   res.json({ exists: !!player });
 });
 
-// Registrar novo jogador
 app.post('/api/player/register', (req, res) => {
   const { name, password } = req.body;
   if (!name || !password) return res.status(400).json({ error: 'Nome e senha obrigatórios' });
@@ -189,7 +208,6 @@ app.post('/api/player/register', (req, res) => {
   res.json({ ok: true });
 });
 
-// Login
 app.post('/api/player/login', (req, res) => {
   const { name, password } = req.body;
   if (!name || !password) return res.status(400).json({ error: 'Dados incompletos' });
@@ -214,7 +232,6 @@ app.get('/api/palpites/:player', (req, res) => {
   res.json(map);
 });
 
-// Salvar palpite — requer autenticação
 app.post('/api/palpites', (req, res) => {
   const { player, password, match_id, home_score, away_score } = req.body;
   if (!player || !password || !match_id || home_score == null || away_score == null)
@@ -315,7 +332,6 @@ app.get('/api/admin/export', adminAuth, (req, res) => {
   res.send(csv);
 });
 
-// Admin: resetar senha de um jogador
 app.post('/api/admin/reset-password', adminAuth, (req, res) => {
   const { name, new_password } = req.body;
   if (!name || !new_password) return res.status(400).json({ error: 'Dados incompletos' });
@@ -325,7 +341,6 @@ app.post('/api/admin/reset-password', adminAuth, (req, res) => {
   res.json({ ok: true });
 });
 
-// Público: palpites de todos para jogos já encerrados (agrupados por match_id)
 app.get('/api/public/closed-palpites', (req, res) => {
   const now = new Date();
   const closedIds = MATCHES.filter(m => now >= new Date(m.dt)).map(m => m.id);
@@ -344,7 +359,6 @@ app.get('/api/public/closed-palpites', (req, res) => {
   res.json(grouped);
 });
 
-// Admin: todos os palpites de todos os jogadores
 app.get('/api/admin/all-palpites', adminAuth, (req, res) => {
   const palpites = db.prepare(`
     SELECT player, match_id, home_score, away_score
@@ -353,13 +367,11 @@ app.get('/api/admin/all-palpites', adminAuth, (req, res) => {
   res.json(palpites);
 });
 
-// Admin: listar jogos eliminatórios
 app.get('/api/admin/knockout-matches', adminAuth, (req, res) => {
   const knockout = MATCHES.filter(m => ['oitavas','quartas','semi','final'].includes(m.phase));
   res.json(knockout);
 });
 
-// Admin: editar times de um jogo eliminatório
 app.post('/api/admin/match-teams', adminAuth, (req, res) => {
   const { match_id, home, hf, away, af } = req.body;
   if (!match_id || !home || !away) return res.status(400).json({ error: 'Dados incompletos' });
@@ -382,7 +394,6 @@ app.post('/api/admin/match-teams', adminAuth, (req, res) => {
   res.json({ ok: true });
 });
 
-// Admin: listar jogadores
 app.get('/api/admin/players', adminAuth, (req, res) => {
   const players = db.prepare('SELECT name, created_at FROM players ORDER BY created_at').all();
   res.json(players);
