@@ -275,7 +275,7 @@ app.get('/api/ranking', (req, res) => {
       if (raw === 10) exact++;
     });
     return { player, pts, exact, total };
-  }).sort((a, b) => b.pts - a.pts);
+  }).sort((a, b) => b.pts - a.pts || b.exact - a.exact);
   res.json({ ranking: scores, jogos: MATCHES.length, finalizados: Object.keys(resMap).length });
 });
 
@@ -324,7 +324,7 @@ app.get('/api/admin/export', adminAuth, (req, res) => {
       if (raw === 10) exact++;
     });
     return { player, pts, exact, total };
-  }).sort((a, b) => b.pts - a.pts);
+  }).sort((a, b) => b.pts - a.pts || b.exact - a.exact);
   const csv = 'Pos,Nome,Pontos,Placares exatos,Jogos apostados\n'
     + scores.map((s, i) => `${i+1},"${s.player}",${s.pts},${s.exact},${s.total}`).join('\n');
   res.setHeader('Content-Type', 'text/csv');
