@@ -83,7 +83,7 @@ const MATCHES = [
   // 15/jun
   { id:'g13', phase:'grupos', group:'Grupo H', home:'Espanha',              hf:'🇪🇸', away:'Cabo Verde',           af:'🇨🇻', dt:'2026-06-15T16:00:00Z' }, // 13:00 BRT
   { id:'g14', phase:'grupos', group:'Grupo G', home:'Bélgica',              hf:'🇧🇪', away:'Egito',                af:'🇪🇬', dt:'2026-06-15T19:00:00Z' }, // 19:00 BRT
-  { id:'g15', phase:'grupos', group:'Grupo H', home:'Arábia Saudita',       hf:'🇸🇦', away:'Uruguai',              af:'🇺🇾', dt:'2026-06-15T22:00:00Z' }, // 19:00 BRT
+  { id:'g15', phase:'grupos', group:'Grupo H', home:'Arábia Saudita',       hf:'🇸🇦', away:'Uruguai',              af:'🇺🇾', dt:'2026-06-15T19:00:00Z' }, // 16:00 BRT
   { id:'g16', phase:'grupos', group:'Grupo G', home:'Irã',                  hf:'🇮🇷', away:'Nova Zelândia',        af:'🇳🇿', dt:'2026-06-16T04:00:00Z' }, // 01:00 BRT
   // 16/jun
   { id:'g17', phase:'grupos', group:'Grupo I', home:'França',               hf:'🇫🇷', away:'Senegal',              af:'🇸🇳', dt:'2026-06-16T19:00:00Z' }, // 16:00 BRT
