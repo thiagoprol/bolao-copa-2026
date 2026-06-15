@@ -1,7 +1,7 @@
 // Bolão TMF/TEM AGRO 2026 — servidor principal
 const express = require('express');
 const Database = require('better-sqlite3'); 
-const cors = require('cors');
+const cors = require('cors'); 
 const path = require('path');
 const crypto = require('crypto');
 
